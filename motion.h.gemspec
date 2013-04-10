@@ -1,11 +1,7 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'motion.h/version'
-
 Gem::Specification.new do |spec|
   spec.name          = "motion.h"
-  spec.version       = Motion.h::VERSION
+  spec.version       = '0.0.1'
   spec.authors       = ["Dave Lee"]
   spec.email         = ["davelee.com@gmail.com"]
   spec.description   = %q{TODO: Write a gem description}
