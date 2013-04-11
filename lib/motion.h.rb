@@ -3,8 +3,11 @@ unless defined? Motion::Project::Config
 end
 
 class Motion::Project::Config
-  def include(header_file, output_dir=nil)
-    MotionHeader.new(header_file, self, output_dir).integrate
+  # @param [String] header_file Requested C header file.
+  # @param [Hash] options Options for customizing BridgeSupport file generation
+  # @option options [String] :bridgesupport_dir Path where the generated bridgesupport file is saved. Defaults to ./build
+  def include(header_file, options={})
+    MotionHeader.new(header_file, self, options).integrate
   end
 end
 
@@ -14,11 +17,12 @@ class MotionHeader
 
   # @param [String] header_file Requested C header file.
   # @param [Motion::Project::Config] config RubyMotion config provided in App.setup.
-  # @param [String] bridgesupport_dir Path where the generated bridgesupport file is saved. Defaults to ./build.
-  def initialize(header_file, config, bridgesupport_dir=BRIDGESUPPORT_DIR)
+  # @param [Hash] options Options for customizing BridgeSupport file generation
+  # @option options [String] :bridgesupport_dir Path where the generated bridgesupport file is saved. Defaults to ./build
+  def initialize(header_file, config, options={})
     @header_file = header_file
     @config = config
-    @bridgesupport_dir = bridgesupport_dir || BRIDGESUPPORT_DIR
+    @bridgesupport_dir = options[:bridgesupport_dir] || BRIDGESUPPORT_DIR
   end
 
   def integrate
