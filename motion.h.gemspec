@@ -3,10 +3,10 @@ Gem::Specification.new do |spec|
   spec.name          = "motion.h"
   spec.version       = '0.0.1'
   spec.authors       = ["Dave Lee"]
-  spec.email         = ["davelee.com@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.email         = ['dave@kastiglione.com']
+  spec.description   = 'Include iOS system libraries in RubyMotion'
+  spec.summary       = 'Include iOS system libraries in RubyMotion'
+  spec.homepage      = 'https://github.com/kastiglione/motion.h'
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
