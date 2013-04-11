@@ -4,8 +4,8 @@ Gem::Specification.new do |spec|
   spec.version       = '0.0.1'
   spec.authors       = ["Dave Lee"]
   spec.email         = ['dave@kastiglione.com']
-  spec.description   = 'Include iOS system libraries in RubyMotion'
-  spec.summary       = 'Include iOS system libraries in RubyMotion'
+  spec.description   = 'Expose iOS system C libraries in RubyMotion'
+  spec.summary       = 'Expose iOS system C libraries in RubyMotion'
   spec.homepage      = 'https://github.com/kastiglione/motion.h'
   spec.license       = "MIT"
 
