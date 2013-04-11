@@ -5,6 +5,7 @@ end
 class Motion::Project::Config
   # @param [String] header_file Requested C header file.
   # @param [Hash] options Options for customizing BridgeSupport file generation
+  # @option options [String] :prefix Subdirectory of /usr/include used for root of included header files.
   # @option options [String] :bridgesupport_dir Path where the generated bridgesupport file is saved. Defaults to ./build
   def include(header_file, options={})
     MotionHeader.new(header_file, self, options).integrate
@@ -18,10 +19,12 @@ class MotionHeader
   # @param [String] header_file Requested C header file.
   # @param [Motion::Project::Config] config RubyMotion config provided in App.setup.
   # @param [Hash] options Options for customizing BridgeSupport file generation
+  # @option options [String] :prefix Subdirectory of /usr/include used for root of included header files.
   # @option options [String] :bridgesupport_dir Path where the generated bridgesupport file is saved. Defaults to ./build
   def initialize(header_file, config, options={})
     @header_file = header_file
     @config = config
+    @prefix = options[:prefix]
     @bridgesupport_dir = options[:bridgesupport_dir] || BRIDGESUPPORT_DIR
   end
 
@@ -43,7 +46,12 @@ class MotionHeader
   end
 
   def include_path
-    "#{@config.xcode_dir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS#{@config.sdk_version}.sdk/usr/include"
+    path_components = [@config.xcode_dir, *sdk_dir(@config.sdk_version), 'usr', 'include', @prefix].compact
+    File.join(*path_components)
+  end
+
+  def sdk_dir(sdk_version)
+    ['Platforms', 'iPhoneOS.platform', 'Developer', 'SDKs', "iPhoneOS#{sdk_version}.sdk"]
   end
 
   def bridgesupport_file
