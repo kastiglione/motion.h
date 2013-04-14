@@ -50,7 +50,7 @@ Example: Creating an in-memory database:
 
 ```ruby
 db = Pointer.new(Sqlite3.type)
-sqlite3_open(':memory', db)
+sqlite3_open(':memory:', db)
 ```
 
 ### Objective-C Runtime
