@@ -49,8 +49,20 @@ end
 Example: Creating an in-memory database:
 
 ```ruby
-db = Pointer.new(Sqlite3.type)
-sqlite3_open(':memory:', db)
+dbptr_out = Pointer.new(Sqlite3.type) # = sqlite3 **
+sqlite3_open(':memory:', dbptr_out)
+dbptr = dbptr_out.value # = sqlite3 *
+sqlite3_exec(dbptr, 'create table gems (name text)', nil, nil, nil)
+sqlite3_exec(dbptr, 'insert into gems values ("motion.h")', nil, nil, nil)
+callback = ->(_context, column_count, values_c_array, column_names_c_array) {
+  column_count.times do |column_number|
+    column_name = column_names_c_array[column_number]
+    value = values_c_array[column_number]
+    puts "#{column_name}: #{value}"
+  end
+  0 # must return 0 to continue
+}
+sqlite3_exec(dbptr, 'select * from gems', callback, nil, nil)
 ```
 
 ### Objective-C Runtime
