@@ -46,7 +46,8 @@ class MotionHeader
   end
 
   def include_path
-    path_components = [@config.xcode_dir, *sdk_dir(@config.sdk_version), 'usr', 'include', @prefix].compact
+    sdk_dir = sdk_dir(@config.sdk_version)
+    path_components = [@config.xcode_dir, *sdk_dir, 'usr', 'include', @prefix].compact
     File.join(*path_components)
   end
 
