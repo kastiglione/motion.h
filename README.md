@@ -1,8 +1,8 @@
 # motion.h
 
-Expose iOS system C libraries in RubyMotion.
+Expose iOS and OS X system libraries in RubyMotion.
 
-Outside of the usual Apple frameworks, iOS includes many system C libraries,
+Outside of the usual Apple frameworks, iOS and OS X include many system libraries,
 with the most well known examples being [SQLite](http://www.sqlite.org/), and
 [Libxml2](http://www.xmlsoft.org/). RubyMotion provides the ability to directly
 call into C libraries through a mechanism called BridgeSupport, which takes us
