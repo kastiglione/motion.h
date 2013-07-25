@@ -52,7 +52,13 @@ class MotionHeader
   end
 
   def sdk_dir(sdk_version)
-    ['Platforms', 'iPhoneOS.platform', 'Developer', 'SDKs', "iPhoneOS#{sdk_version}.sdk"]
+    template = Motion::Project::App.respond_to?(:template) ? Motion::Project::App.template : :ios
+    case template
+    when :ios
+      ['Platforms', 'iPhoneOS.platform', 'Developer', 'SDKs', "iPhoneOS#{sdk_version}.sdk"]
+    when :osx
+      ['Platforms', 'MacOSX.platform', 'Developer', 'SDKs', "MacOSX#{sdk_version}.sdk"]
+    end
   end
 
   def bridgesupport_file
