@@ -42,7 +42,15 @@ class MotionHeader
   def generate_bridgesupport_file
     return if File.exist?(bridgesupport_file)
     Dir.mkdir(@bridgesupport_dir) unless Dir.exist?(@bridgesupport_dir)
-    `/usr/bin/gen_bridge_metadata --format complete --no-64-bit --cflags '-I#{include_path}' #{@header_file} > #{bridgesupport_file}`
+    flag = begin
+      case platform
+      when :ios
+        "--no-64-bit"
+      when :osx
+        "--64-bit"
+      end
+    end
+    `/usr/bin/gen_bridge_metadata --format complete #{flag} --cflags '-I#{include_path}' #{@header_file} > #{bridgesupport_file}`
   end
 
   def include_path
@@ -52,7 +60,12 @@ class MotionHeader
   end
 
   def sdk_dir(sdk_version)
-    ['Platforms', 'iPhoneOS.platform', 'Developer', 'SDKs', "iPhoneOS#{sdk_version}.sdk"]
+    case platform
+    when :ios
+      ['Platforms', 'iPhoneOS.platform', 'Developer', 'SDKs', "iPhoneOS#{sdk_version}.sdk"]
+    when :osx
+      ['Platforms', 'MacOSX.platform', 'Developer', 'SDKs', "MacOSX#{sdk_version}.sdk"]
+    end
   end
 
   def bridgesupport_file
@@ -60,4 +73,7 @@ class MotionHeader
     "#{@bridgesupport_dir}/#{file_name}.bridgesupport"
   end
 
+  def platform
+    Motion::Project::App.respond_to?(:template) ? Motion::Project::App.template : :ios
+  end
 end
