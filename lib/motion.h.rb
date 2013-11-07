@@ -50,12 +50,18 @@ class MotionHeader
         "--64-bit"
       end
     end
-    `/usr/bin/gen_bridge_metadata --format complete #{flag} --cflags '-I#{include_path}' #{@header_file} > #{bridgesupport_file}`
+    `/usr/bin/gen_bridge_metadata --format complete #{flag} --cflags '-I#{include_path} -F#{frameworks_path}' #{@header_file} > #{bridgesupport_file}`
   end
 
   def include_path
     sdk_dir = sdk_dir(@config.sdk_version)
     path_components = [@config.xcode_dir, *sdk_dir, 'usr', 'include', @prefix].compact
+    File.join(*path_components)
+  end
+
+  def frameworks_path
+    sdk_dir = sdk_dir(@config.sdk_version)
+    path_components = [@config.xcode_dir, *sdk_dir, 'System', 'Library', 'Frameworks'].compact
     File.join(*path_components)
   end
 
