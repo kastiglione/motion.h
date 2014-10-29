@@ -2,13 +2,31 @@ unless defined? Motion::Project::Config
   raise '"motion.h" must be required within a RubyMotion project Rakefile.'
 end
 
-class Motion::Project::Config
-  # @param [String] header_file Requested C header file.
-  # @param [Hash] options Options for customizing BridgeSupport file generation
-  # @option options [String] :prefix Subdirectory of /usr/include used for root of included header files.
-  # @option options [String] :bridgesupport_dir Path where the generated bridgesupport file is saved. Defaults to ./build
-  def include(header_file, options={})
-    MotionHeader.new(header_file, self, options).integrate
+module Motion::Project
+  class Config
+    # @param [String] header_file Requested C header file.
+    # @param [Hash] options Options for customizing BridgeSupport file generation
+    # @option options [String] :prefix Subdirectory of /usr/include used for root of included header files.
+    # @option options [String] :bridgesupport_dir Path where the generated bridgesupport file is saved. Defaults to ./build
+    def include(header_file, options={})
+      motion_h << MotionHeader.new(header_file, self, options).integrate
+    end
+
+    def motion_h
+      @motion_h ||= []
+    end
+  end
+
+  class App
+    class << self
+      def build_with_motion_h(platform, opts = {})
+        config.bridgesupport_files.concat(config.motion_h)
+        build_without_motion_h(platform, opts)
+      end
+
+      alias_method "build_without_motion_h", "build"
+      alias_method "build", "build_with_motion_h"
+    end
   end
 end
 
@@ -31,7 +49,7 @@ class MotionHeader
   def integrate
     verify_header_file
     generate_bridgesupport_file
-    @config.bridgesupport_files << bridgesupport_file
+    bridgesupport_file
   end
 
   def verify_header_file
