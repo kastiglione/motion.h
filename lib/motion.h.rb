@@ -68,7 +68,7 @@ class MotionHeader
         "--64-bit"
       end
     end
-    `/usr/bin/gen_bridge_metadata --format complete #{flag} --cflags '-I#{include_path} -F#{frameworks_path}' #{@header_file} > #{bridgesupport_file}`
+    `/Library/RubyMotion/bin/gen_bridge_metadata --format complete #{flag} --cflags '-I#{include_path} -F#{frameworks_path}' #{@header_file} > #{bridgesupport_file}`
   end
 
   def include_path
