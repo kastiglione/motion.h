@@ -1,11 +1,11 @@
 # coding: utf-8
 Gem::Specification.new do |spec|
   spec.name          = "motion.h"
-  spec.version       = '0.0.5'
+  spec.version       = '0.0.6'
   spec.authors       = ["Dave Lee"]
   spec.email         = ['dave@kastiglione.com']
-  spec.description   = 'Expose iOS system C libraries in RubyMotion'
-  spec.summary       = 'Expose iOS system C libraries in RubyMotion'
+  spec.description   = 'Expose iOS system C libraries in RubyMotion.'
+  spec.summary       = 'Expose iOS system C libraries in RubyMotion.'
   spec.homepage      = 'https://github.com/kastiglione/motion.h'
   spec.license       = "MIT"
 
