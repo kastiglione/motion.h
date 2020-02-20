@@ -60,16 +60,15 @@ class MotionHeader
   def generate_bridgesupport_file
     return if File.exist?(bridgesupport_file)
     Dir.mkdir(@bridgesupport_dir) unless Dir.exist?(@bridgesupport_dir)
-    flag = begin
-      case platform
-      when :ios
-        "--no-64-bit"
-      when :osx
-        "--64-bit"
-      end
+    cflags = [
+      "-I#{include_path}",
+      "-F#{frameworks_path}"
+    ]
+    if `sw_vers -productVersion` =~ /^10.15/ # Catalina
+      cflags << "--isysroot #{isysroot_dir}"
     end
     Bundler.with_clean_env do
-      `/Library/RubyMotion/bin/gen_bridge_metadata --format complete #{flag} --cflags '-I#{include_path} -F#{frameworks_path}' #{@header_file} > #{bridgesupport_file}`
+      `/Library/RubyMotion/bin/gen_bridge_metadata --format complete --64-bit --cflags '#{cflags.join(' ')}' #{@header_file} > #{bridgesupport_file}`
     end
   end
 
@@ -83,6 +82,13 @@ class MotionHeader
     sdk_dir = sdk_dir(@config.sdk_version)
     path_components = [@config.xcode_dir, *sdk_dir, 'System', 'Library', 'Frameworks'].compact
     File.join(*path_components)
+  end
+
+  def isysroot_dir
+    case platform
+    when :ios then 'iPhoneOS'
+    when :osx then 'MacOSX'
+    end
   end
 
   def sdk_dir(sdk_version)
