@@ -67,7 +67,7 @@ class MotionHeader
     if `sw_vers -productVersion` =~ /^10.15/ # Catalina
       cflags << "--isysroot #{isysroot_dir}"
     end
-    Bundler.with_clean_env do
+    Bundler.with_unbundled_env do
       `/Library/RubyMotion/bin/gen_bridge_metadata --format complete --64-bit --cflags '#{cflags.join(' ')}' #{@header_file} > #{bridgesupport_file}`
     end
   end
