@@ -64,12 +64,20 @@ class MotionHeader
       "-I#{include_path}",
       "-F#{frameworks_path}"
     ]
-    if `sw_vers -productVersion` =~ /^10.15/ # Catalina
+    if product_version >= catalina_version
       cflags << "--isysroot #{isysroot_dir}"
     end
     Bundler.with_unbundled_env do
       `/Library/RubyMotion/bin/gen_bridge_metadata --format complete --64-bit --cflags '#{cflags.join(' ')}' #{@header_file} > #{bridgesupport_file}`
     end
+  end
+
+  def catalina_version
+    Gem::Version.new('10.15')
+  end
+
+  def product_version
+    Gem::Version.new(`sw_vers -productVersion`)
   end
 
   def include_path
